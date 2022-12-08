@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 
 /**
- * Module dependencies.
+ * 1. 创建服务
+ * 2. 监听端口
+ * 3. 启动服务
+ * 4. 处理异常
+ * 5. 处理监听
  */
 
-var app = require('../app');
+/**
+ * Module dependencies.
+ */
+var app = require('../src/app');
 var debug = require('debug')('demo:server');
 var http = require('http');
+
 
 /**
  * Get port from environment and store in Express.
