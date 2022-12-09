@@ -9,15 +9,25 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 
 const { REDIS_CONF } = require('./conf/db');
+const { isProd } = require('./utils/env');
 
 // routes
 const index = require('./routes/index');
 const users = require('./routes/users');
+const errorViewRouter = require('./routes/view/error');
 
 // error handler
-onerror(app); // 错误处理 打印到页面
+let onerrorConf = {};
+console.log('isProd-->', isProd);
+if (isProd) {
+  // 生产环境 本地环境不跳转
+  onerrorConf = {
+    redirect: '/error', // 错误处理 重定向到 /error
+  };
+}
+onerror(app, onerrorConf); // 错误处理 打印到页面
 
-// middlewares
+// middlewares 中间件
 app.use(
   bodyparser({
     enableTypes: ['json', 'form', 'text'],
@@ -27,6 +37,7 @@ app.use(json()); // 解析json
 app.use(logger()); // 日志
 app.use(require('koa-static')(__dirname + '/public')); // 静态资源
 
+// 配置模板引擎
 app.use(
   views(__dirname + '/views', {
     extension: 'ejs',
@@ -52,18 +63,10 @@ app.use(
   })
 );
 
-// logger
-// app.use(async (ctx, next) => {
-//   // 记录日志 演示 手写的一个
-//   const start = new Date()
-//   await next()
-//   const ms = new Date() - start
-//   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-// })
-
 // routes
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
+app.use(errorViewRouter.routes(), index.allowedMethods()); // 错误处理 注册到最下面
 
 // error-handling
 app.on('error', (err, ctx) => {
