@@ -13,12 +13,12 @@ const { isProd } = require('./utils/env');
 
 // routes
 const index = require('./routes/index');
-const users = require('./routes/users');
+const userViewRouter = require('./routes/view/user');
+const userApiRouter = require('./routes/api/user');
 const errorViewRouter = require('./routes/view/error');
 
 // error handler
 let onerrorConf = {};
-console.log('isProd-->', isProd);
 if (isProd) {
   // 生产环境 本地环境不跳转
   onerrorConf = {
@@ -65,7 +65,9 @@ app.use(
 
 // routes
 app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods());
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods());
+
 app.use(errorViewRouter.routes(), index.allowedMethods()); // 错误处理 注册到最下面
 
 // error-handling
