@@ -3,7 +3,7 @@
  * @author: 刘新金
  */
 
-const { DEFAULT_PICTURE } = require('../controller/constant');
+const { DEFAULT_PICTURE } = require('../conf/constant');
 
 /**
  * 用户默认头像

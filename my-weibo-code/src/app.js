@@ -10,6 +10,7 @@ const redisStore = require('koa-redis');
 
 const { REDIS_CONF } = require('./conf/db');
 const { isProd } = require('./utils/env');
+const { SESSION_SECRET_KEY } = require('./conf/secretKeys');
 
 // routes
 const index = require('./routes/index');
@@ -45,7 +46,7 @@ app.use(
 ); // 视图  ejs
 
 // session 配置
-app.keys = ['KEY_#cookie$123_']; // 加密cookie
+app.keys = [SESSION_SECRET_KEY]; // 加密cookie
 app.use(
   session({
     key: 'weibo.sid', // cookie name 默认是 'koa.sid'

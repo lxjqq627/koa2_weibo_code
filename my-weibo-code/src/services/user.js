@@ -33,6 +33,24 @@ async function getUserInfo(userName, password) {
   return formatRes; // 返回数据库中找到的数据
 }
 
+/**
+ * 创建用户
+ * @param {string} userName
+ * @param {string} password
+ * @param {number} gender
+ * @param {string} nickName
+ */
+async function createUser({ userName, password, gender = 3, nickName }) {
+  const result = await User.create({
+    userName,
+    password,
+    nickName: nickName ? nickName : userName,
+    gender,
+  });
+  return result.dataValues;
+}
+
 module.exports = {
   getUserInfo,
+  createUser,
 };
