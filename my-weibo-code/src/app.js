@@ -56,7 +56,6 @@ app.use(
       httpOnly: true, // 只能服务端修改 cookie 不能客户端修改
       maxAge: 24 * 60 * 60 * 1000, // cookie 的过期时间 1天 24小时 60分钟 60秒 1000毫秒
     },
-    ttl: 24 * 60 * 60 * 1000, // redis 过期时间 1天 24小时 60分钟 60秒 1000毫秒 可以不写 工具已经做好时间和maxAge一样 但是不建议不写
     store: redisStore({
       // session 存储到 redis
       all: `${REDIS_CONF.host}:${REDIS_CONF.port}`, // redis 的地址

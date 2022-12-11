@@ -109,7 +109,7 @@
         var password = $inputPassword.val();
         var passwordRepeat = $inputPasswordRepeat.val();
         $spanPasswordRepeatInfo.show();
-        if (password === passwordRepeat) {
+        if (password == passwordRepeat) {
           $spanPasswordRepeatInfo.text('两次密码一致');
           isPasswordSame = true;
         } else {

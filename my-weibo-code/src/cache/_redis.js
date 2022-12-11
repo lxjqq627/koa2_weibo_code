@@ -17,7 +17,7 @@ redisClient.on('error', (err) => {
  * @param {number} timeout 过期时间 单位 秒
  */
 function set(key, val, timeout = 60 * 60) {
-  if (typeof val === 'object') {
+  if (typeof val == 'object') {
     val = JSON.stringify(val);
   }
   redisClient.set(key, val); // 设置值
