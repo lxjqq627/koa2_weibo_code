@@ -15,7 +15,8 @@ const { isProd } = require('./utils/env');
 const { SESSION_SECRET_KEY } = require('./conf/secretKeys');
 
 // routes
-const index = require('./routes/index');
+const homeApiRouter = require('./routes/api/blog-home');
+const blogViewRouter = require('./routes/view/blog');
 const utilsApiRouter = require('./routes/api/utils');
 const userViewRouter = require('./routes/view/user');
 const userApiRouter = require('./routes/api/user');
@@ -68,11 +69,12 @@ app.use(
 );
 
 // routes
-app.use(index.routes(), index.allowedMethods());
+app.use(homeApiRouter.routes(), homeApiRouter.allowedMethods());
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods());
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods());
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods());
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods());
-app.use(errorViewRouter.routes(), index.allowedMethods()); // 错误处理 注册到最下面
+app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()); // 错误处理 注册到最下面
 
 // error-handling
 app.on('error', (err, ctx) => {
