@@ -1,3 +1,4 @@
+const path = require('path');
 const Koa = require('koa');
 const app = new Koa();
 const views = require('koa-views');
@@ -7,6 +8,7 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
+const koaStatic = require('koa-static');
 
 const { REDIS_CONF } = require('./conf/db');
 const { isProd } = require('./utils/env');
@@ -14,6 +16,7 @@ const { SESSION_SECRET_KEY } = require('./conf/secretKeys');
 
 // routes
 const index = require('./routes/index');
+const utilsApiRouter = require('./routes/api/utils');
 const userViewRouter = require('./routes/view/user');
 const userApiRouter = require('./routes/api/user');
 const errorViewRouter = require('./routes/view/error');
@@ -36,7 +39,8 @@ app.use(
 ); // 解析数据
 app.use(json()); // 解析json
 app.use(logger()); // 日志
-app.use(require('koa-static')(__dirname + '/public')); // 静态资源
+app.use(koaStatic(__dirname + '/public')); // 静态资源
+app.use(koaStatic(path.join(__dirname, '..', 'uploadFiles')));
 
 // 配置模板引擎
 app.use(
@@ -65,9 +69,9 @@ app.use(
 
 // routes
 app.use(index.routes(), index.allowedMethods());
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods());
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods());
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods());
-
 app.use(errorViewRouter.routes(), index.allowedMethods()); // 错误处理 注册到最下面
 
 // error-handling
