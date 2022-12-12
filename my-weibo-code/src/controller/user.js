@@ -3,7 +3,12 @@
  * @author: 刘新金
  */
 
-const { getUserInfo, createUser, deleteUser } = require('../services/user');
+const {
+  getUserInfo,
+  createUser,
+  deleteUser,
+  updateUser,
+} = require('../services/user');
 const { SuccessModel, ErrorModel } = require('../model/ResModel');
 const {
   registerUserNameNotExistInfo,
@@ -11,6 +16,7 @@ const {
   registerFailInfo,
   loginFailInfo,
   deleteUserFailInfo,
+  changeInfoFailInfo,
 } = require('../model/ErrorInfo');
 const doCrypto = require('../utils/cryp');
 
@@ -90,9 +96,42 @@ async function deleteCurUser(userName) {
   return new ErrorModel(deleteUserFailInfo);
 }
 
+/**
+ * 修改个人信息
+ * @param {Object} ctx
+ * @param {string} nickName
+ * @param {string} city
+ * @param {string} picture
+ */
+async function changeInfo(ctx, { nickName, city, picture }) {
+  const { userName } = ctx.session.userInfo;
+  if (!nickName) {
+    nickName = userName;
+  }
+  // service
+  const result = await updateUser(
+    {
+      newNickName: nickName,
+      newCity: city,
+      newPicture: picture,
+    },
+    { userName }
+  );
+  if (result) {
+    Object.assign(ctx.session.userInfo, {
+      nickName,
+      city,
+      picture,
+    });
+    return new SuccessModel();
+  }
+  return new ErrorModel(changeInfoFailInfo);
+}
+
 module.exports = {
   isExist,
   register,
   login,
   deleteCurUser,
+  changeInfo,
 };
