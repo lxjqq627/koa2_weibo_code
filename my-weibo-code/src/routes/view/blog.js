@@ -42,19 +42,7 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
 
   const result = await getProfileBlogList(curUserName, 0); // 获取第一页数据
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data;
-  console.log('===================', {
-    blogData: {
-      isEmpty,
-      blogList,
-      pageSize,
-      pageIndex,
-      count,
-    },
-    userData: {
-      userInfo: curUserInfo,
-      isMe,
-    },
-  });
+
   await ctx.render('profile', {
     blogData: {
       isEmpty,
