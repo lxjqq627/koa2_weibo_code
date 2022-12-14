@@ -2,10 +2,17 @@
  * @description 用户关系 controller
  * @author 刘新金
  */
-const { getUsersByFollower } = require('../services/user-relation');
 const { SuccessModel, ErrorModel } = require('../model/ResModel');
-const { addFollowerFailInfo } = require('../model/ErrorInfo');
-const { addFollow, deleteFollow } = require('../services/user-relation');
+const {
+  addFollowerFailInfo,
+  deleteFollowerFailInfo,
+} = require('../model/ErrorInfo');
+const {
+  getUsersByFollower,
+  addFollow,
+  deleteFollow,
+  getFollowersByUser,
+} = require('../services/user-relation');
 
 /**
  * 根据userId获取粉丝列表
@@ -17,6 +24,20 @@ async function getFans(userId) {
   return new SuccessModel({
     count,
     fansList: userList,
+  });
+}
+
+/**
+ * 获取关注人列表
+ * @param {number} userId
+ * @returns
+ */
+async function getFollowers(userId) {
+  // service
+  const { count, userList } = await getFollowersByUser(userId);
+  return new SuccessModel({
+    count,
+    followersList: userList,
   });
 }
 
@@ -53,4 +74,5 @@ module.exports = {
   getFans,
   follow,
   unFollow,
+  getFollowers,
 };
