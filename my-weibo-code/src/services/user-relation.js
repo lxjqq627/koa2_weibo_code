@@ -4,6 +4,7 @@
  */
 const { User, UserRelation } = require('../db/model/index');
 const { formatUser } = require('./_format');
+const Sequelize = require('sequelize');
 
 /**
  * @description 根据followerId获取被关注人粉丝列表
@@ -18,7 +19,10 @@ async function getUsersByFollower(followerId) {
       {
         model: UserRelation,
         where: {
-          followerId, //
+          followerId,
+          userId: {
+            [Sequelize.Op.ne]: followerId, // 不等于自己
+          },
         },
       },
     ],
@@ -48,6 +52,9 @@ async function getFollowersByUser(userId) {
     ],
     where: {
       userId,
+      followerId: {
+        [Sequelize.Op.ne]: userId, // 不等于自己
+      },
     },
   });
 
@@ -72,7 +79,7 @@ async function getFollowersByUser(userId) {
  * @param {number} userId 用户 iD
  * @param {number} followerId 被关注的用户ID
  */
-async function addFollow(userId, followerId) {
+async function addFollowUser(userId, followerId) {
   // 创建关系
   const result = await UserRelation.create({
     userId,
@@ -93,7 +100,7 @@ async function deleteFollow(userId, followerId) {
 
 module.exports = {
   getUsersByFollower,
-  addFollow,
+  addFollowUser,
   deleteFollow,
   getFollowersByUser,
 };

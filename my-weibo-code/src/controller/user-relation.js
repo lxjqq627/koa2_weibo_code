@@ -9,7 +9,7 @@ const {
 } = require('../model/ErrorInfo');
 const {
   getUsersByFollower,
-  addFollow,
+  addFollowUser,
   deleteFollow,
   getFollowersByUser,
 } = require('../services/user-relation');
@@ -49,7 +49,7 @@ async function getFollowers(userId) {
  */
 async function follow(myUserId, curUserId) {
   try {
-    await addFollow(myUserId, curUserId);
+    await addFollowUser(myUserId, curUserId);
     return new SuccessModel();
   } catch (ex) {
     console.error(ex.message, ex.stack);
