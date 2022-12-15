@@ -17,7 +17,9 @@
     </a>
     <% } %>
     <a href="/profile/<%= blog.user.userName%>"> <%= blog.user.nickName%> </a>:
-    <span><%- blog.content%></span>
+    <!-- <span><%= blog.content%></span> -->
+    <!-- 一个横杠转义html字符串为标签 -->
+    <span><%- blog.contentFormat%></span>
   </div>
   <div class="info">
     <span><%= blog.createdAtFormat%></span>

@@ -3,7 +3,7 @@
  * @author: 刘新金
  */
 
-const { DEFAULT_PICTURE } = require('../conf/constant');
+const { DEFAULT_PICTURE, REG_FOR_AT_WHO } = require('../conf/constant');
 const { timeFormat } = require('../utils/dt');
 
 /**
@@ -42,6 +42,22 @@ function _formatDBTime(obj) {
 }
 
 /**
+ * 格式化微博内容
+ * @param {Object} obj
+ * @returns
+ */
+function _formatContent(obj) {
+  obj.contentFormat = obj.content;
+  obj.contentFormat = obj.contentFormat.replace(
+    REG_FOR_AT_WHO,
+    (matchStr, nickName, userName) => {
+      return `<a href="/profile/${userName}">@${nickName}</a>`;
+    }
+  );
+  return obj;
+}
+
+/**
  * 格式化微博信息
  * @param {Array|Object} list
  * @returns
@@ -52,12 +68,14 @@ function formatBlog(list) {
   }
 
   if (list instanceof Array) {
-    // 数组 用户列表
-    return list.map(_formatDBTime);
+    // 数组
+    return list.map(_formatDBTime).map(_formatContent);
   }
-
-  // 单个对象
-  return _formatDBTime(list);
+  // 对象
+  let result = list;
+  result = _formatDBTime(result);
+  result = _formatContent(result);
+  return result;
 }
 
 module.exports = {

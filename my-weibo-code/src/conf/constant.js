@@ -10,4 +10,5 @@ const PAGE_SIZE = 5;
 module.exports = {
   DEFAULT_PICTURE,
   PAGE_SIZE,
+  REG_FOR_AT_WHO: /@(.+?)\s-\s(\w+?)\b/g,
 };
